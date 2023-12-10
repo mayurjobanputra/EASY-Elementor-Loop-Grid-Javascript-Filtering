@@ -1,10 +1,6 @@
 # EASY Elementor Loop Grid JavaScript Filtering
 
-
-
 https://github.com/mayurjobanputra/EASY-Elementor-Loop-Grid-Javascript-Filtering/assets/6332663/d59f43a8-a508-4ff9-b925-18e738c556f3
-
-
 
 This repository contains a simple yet powerful JavaScript solution designed to enhance the functionality of Elementor loop grids. The script enables dynamic filtering of Elementor loop grid items based on user input, providing a seamless and interactive experience.
 
@@ -34,5 +30,10 @@ The script uses jQuery for DOM manipulation and event handling. It observes chan
     - Ensure that your Elementor Pro version is up to date.
     - Double-check that the script is correctly placed as per the instructions.
     - If problems persist, consider seeking help by using ChatGPT. Provide the HTML of your page and ask for specific input or troubleshooting steps regarding the issue.
+
+## View the Source
+
+For a detailed view of the implementation, check out the main HTML file:
+[View the main HTML file](https://github.com/mayurjobanputra/EASY-Elementor-Loop-Grid-Javascript-Filtering/blob/main/index.html)
 
 This repository is perfect for Elementor users looking to add interactive and user-friendly filtering to their loop grids. It's easy to implement and doesn't require extensive JavaScript knowledge.

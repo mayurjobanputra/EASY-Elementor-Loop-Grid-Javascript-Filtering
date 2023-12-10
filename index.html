@@ -1,59 +1,66 @@
+<!-- Filter Container -->
 <div class="filter-container" style="display:flex;width:100%;flex-direction:row;justify-content:center;align-items:center;">
+    <!-- Input Field for Filtering -->
     <input style="border:1px solid #d9d9d9;font-family:quicksand;" type="text" id="filter-input" placeholder="Type to filter...">
+    <!-- Span to Display Item Count -->
     <span id="item-count" style="font-family:quicksand;font-size:15px;color:grey;text-wrap:nowrap;margin-left:20px;"></span>
 </div>
 
 <script>
+// Ensure the document is fully loaded before executing the script
 jQuery(document).ready(function($) {
-    var filterTimeout;
-    updateItemCount(); // Initial count update
+    var filterTimeout; // Timeout variable to control the delay in filtering
 
-    // Set up a MutationObserver to monitor changes in the loop container
+    updateItemCount(); // Call to initial function to update item count
+
+    // MutationObserver to monitor changes in the Elementor loop container
     var observer = new MutationObserver(function(mutations) {
         mutations.forEach(function(mutation) {
+            // Check if new nodes (items) are added to the DOM
             if (mutation.addedNodes.length > 0) {
-                updateItemCount(); // Update count when new items are added
+                updateItemCount(); // Update the item count when new items are added
             }
         });
     });
 
-    // Start observing the target node for configured mutations
+    // Configure the observer to watch for changes in the child elements of the loop container
     observer.observe(document.querySelector('.elementor .e-loop-item').parentNode, {
-        childList: true // Configuration to track added or removed child nodes
+        childList: true // Monitor for added or removed child nodes
     });
 
+    // Event listener for changes in the filter input field
     $('#filter-input').on('input', function() {
-        clearTimeout(filterTimeout);
+        clearTimeout(filterTimeout); // Clear previous timeout to prevent multiple triggers
         filterTimeout = setTimeout(function() {
-            var searchText = $('#filter-input').val().toLowerCase();
+            var searchText = $('#filter-input').val().toLowerCase(); // Get the current input text and convert to lowercase
 
+            // Iterate over each loop item and apply filter logic
             $('.elementor .e-loop-item').each(function() {
-                var itemText = $(this).text().toLowerCase();
+                var itemText = $(this).text().toLowerCase(); // Get text of the item and convert to lowercase
                 if (itemText.includes(searchText)) {
-                    $(this).css('display', ''); // reset to default display style
+                    $(this).css('display', ''); // Show item if it matches the search text
                 } else {
-                    $(this).css('display', 'none'); // hide the non-matching item
+                    $(this).css('display', 'none'); // Hide item if it does not match the search text
                 }
             });
-            updateItemCount(); // Update count after filter
-        }, 1000); // 1 second pause in typing
+            updateItemCount(); // Update the item count after applying the filter
+        }, 1000); // Set a delay of 1 second before triggering the filter function
     });
 
-    // Event delegation for "Load More" button within the .e-loop__load-more parent
+    // Event delegation for handling click on "Load More" button
     $(document).on('click', '.e-loop__load-more .elementor-button-link.elementor-button', function() {
-        $('#filter-input').val('');
-        $('.elementor .e-loop-item').css('display', ''); // reset all items to default display
-        updateItemCount(); // Update count after loading more items
+        $('#filter-input').val(''); // Clear the filter input field
+        $('.elementor .e-loop-item').css('display', ''); // Reset display of all items to default
+        updateItemCount(); // Update the item count after loading more items
     });
 
-    // Function to update the item count
+    // Function to update the display of the total and visible item count
     function updateItemCount() {
-        var totalItems = $('.elementor .e-loop-item').length;
+        var totalItems = $('.elementor .e-loop-item').length; // Count total items
         var visibleItems = $('.elementor .e-loop-item').filter(function() {
-            return $(this).css('display') !== 'none';
+            return $(this).css('display') !== 'none'; // Count visible items
         }).length;
-        $('#item-count').text('Showing ' + visibleItems + '/' + totalItems + ' items');
+        $('#item-count').text('Showing ' + visibleItems + '/' + totalItems + ' items'); // Update text of item count display
     }
 });
 </script>
-

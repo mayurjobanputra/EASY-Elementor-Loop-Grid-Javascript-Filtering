@@ -1,0 +1,59 @@
+<div class="filter-container" style="display:flex;width:100%;flex-direction:row;justify-content:center;align-items:center;">
+    <input style="border:1px solid #d9d9d9;font-family:quicksand;" type="text" id="filter-input" placeholder="Type to filter...">
+    <span id="item-count" style="font-family:quicksand;font-size:15px;color:grey;text-wrap:nowrap;margin-left:20px;"></span>
+</div>
+
+<script>
+jQuery(document).ready(function($) {
+    var filterTimeout;
+    updateItemCount(); // Initial count update
+
+    // Set up a MutationObserver to monitor changes in the loop container
+    var observer = new MutationObserver(function(mutations) {
+        mutations.forEach(function(mutation) {
+            if (mutation.addedNodes.length > 0) {
+                updateItemCount(); // Update count when new items are added
+            }
+        });
+    });
+
+    // Start observing the target node for configured mutations
+    observer.observe(document.querySelector('.elementor .e-loop-item').parentNode, {
+        childList: true // Configuration to track added or removed child nodes
+    });
+
+    $('#filter-input').on('input', function() {
+        clearTimeout(filterTimeout);
+        filterTimeout = setTimeout(function() {
+            var searchText = $('#filter-input').val().toLowerCase();
+
+            $('.elementor .e-loop-item').each(function() {
+                var itemText = $(this).text().toLowerCase();
+                if (itemText.includes(searchText)) {
+                    $(this).css('display', ''); // reset to default display style
+                } else {
+                    $(this).css('display', 'none'); // hide the non-matching item
+                }
+            });
+            updateItemCount(); // Update count after filter
+        }, 1000); // 1 second pause in typing
+    });
+
+    // Event delegation for "Load More" button within the .e-loop__load-more parent
+    $(document).on('click', '.e-loop__load-more .elementor-button-link.elementor-button', function() {
+        $('#filter-input').val('');
+        $('.elementor .e-loop-item').css('display', ''); // reset all items to default display
+        updateItemCount(); // Update count after loading more items
+    });
+
+    // Function to update the item count
+    function updateItemCount() {
+        var totalItems = $('.elementor .e-loop-item').length;
+        var visibleItems = $('.elementor .e-loop-item').filter(function() {
+            return $(this).css('display') !== 'none';
+        }).length;
+        $('#item-count').text('Showing ' + visibleItems + '/' + totalItems + ' items');
+    }
+});
+</script>
+
